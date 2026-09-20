@@ -1,0 +1,298 @@
+[
+ {
+  "id": "1",
+  "text": "今日は",
+  "startMs": 130,
+  "endMs": 660,
+  "words": [
+   {
+    "text": "今日は",
+    "startMs": 130,
+    "endMs": 700
+   }
+  ]
+ },
+ {
+  "id": "2",
+  "text": "本気で",
+  "startMs": 700,
+  "endMs": 1000,
+  "words": [
+   {
+    "text": "本気で",
+    "startMs": 700,
+    "endMs": 1040
+   }
+  ]
+ },
+ {
+  "id": "3",
+  "text": "リールの",
+  "startMs": 1040,
+  "endMs": 1690,
+  "words": [
+   {
+    "text": "リールの",
+    "startMs": 1040,
+    "endMs": 1730
+   }
+  ]
+ },
+ {
+  "id": "4",
+  "text": "作り方を",
+  "startMs": 1730,
+  "endMs": 2370,
+  "words": [
+   {
+    "text": "作り方を",
+    "startMs": 1730,
+    "endMs": 2410
+   }
+  ]
+ },
+ {
+  "id": "5",
+  "text": "全部",
+  "startMs": 2410,
+  "endMs": 2720,
+  "words": [
+   {
+    "text": "全部",
+    "startMs": 2410,
+    "endMs": 2760
+   }
+  ]
+ },
+ {
+  "id": "6",
+  "text": "話します",
+  "startMs": 2760,
+  "endMs": 3950,
+  "words": [
+   {
+    "text": "話します",
+    "startMs": 2760,
+    "endMs": 3990
+   }
+  ]
+ },
+ {
+  "id": "7",
+  "text": "まず最初に",
+  "startMs": 3990,
+  "endMs": 4550,
+  "words": [
+   {
+    "text": "まず",
+    "startMs": 3990,
+    "endMs": 4080
+   },
+   {
+    "text": "最初に",
+    "startMs": 4080,
+    "endMs": 4590
+   }
+  ]
+ },
+ {
+  "id": "8",
+  "text": "大事なのは",
+  "startMs": 4590,
+  "endMs": 5400,
+  "words": [
+   {
+    "text": "大事なのは",
+    "startMs": 4590,
+    "endMs": 5440
+   }
+  ]
+ },
+ {
+  "id": "9",
+  "text": "最初の",
+  "startMs": 5440,
+  "endMs": 5910,
+  "words": [
+   {
+    "text": "最初の",
+    "startMs": 5440,
+    "endMs": 5950
+   }
+  ]
+ },
+ {
+  "id": "10",
+  "text": "1秒で",
+  "startMs": 5950,
+  "endMs": 6420,
+  "words": [
+   {
+    "text": "1秒で",
+    "startMs": 5950,
+    "endMs": 6460
+   }
+  ]
+ },
+ {
+  "id": "11",
+  "text": "目を",
+  "startMs": 6460,
+  "endMs": 6760,
+  "words": [
+   {
+    "text": "目を",
+    "startMs": 6460,
+    "endMs": 6800
+   }
+  ]
+ },
+ {
+  "id": "12",
+  "text": "止めることです",
+  "startMs": 6800,
+  "endMs": 8060,
+  "words": [
+   {
+    "text": "止めることです",
+    "startMs": 6800,
+    "endMs": 8100
+   }
+  ]
+ },
+ {
+  "id": "13",
+  "text": "次に字幕は",
+  "startMs": 8100,
+  "endMs": 8960,
+  "words": [
+   {
+    "text": "次に",
+    "startMs": 8100,
+    "endMs": 8520
+   },
+   {
+    "text": "字幕は",
+    "startMs": 8520,
+    "endMs": 9000
+   }
+  ]
+ },
+ {
+  "id": "14",
+  "text": "一行ごとに",
+  "startMs": 9000,
+  "endMs": 9520,
+  "words": [
+   {
+    "text": "一行ごとに",
+    "startMs": 9000,
+    "endMs": 9560
+   }
+  ]
+ },
+ {
+  "id": "15",
+  "text": "見た目を",
+  "startMs": 9560,
+  "endMs": 10080,
+  "words": [
+   {
+    "text": "見た目を",
+    "startMs": 9560,
+    "endMs": 10120
+   }
+  ]
+ },
+ {
+  "id": "16",
+  "text": "変えると",
+  "startMs": 10120,
+  "endMs": 10710,
+  "words": [
+   {
+    "text": "変えると",
+    "startMs": 10120,
+    "endMs": 10750
+   }
+  ]
+ },
+ {
+  "id": "17",
+  "text": "飽きられません",
+  "startMs": 10750,
+  "endMs": 11770,
+  "words": [
+   {
+    "text": "飽きられません",
+    "startMs": 10750,
+    "endMs": 11810
+   }
+  ]
+ },
+ {
+  "id": "18",
+  "text": "最後まで",
+  "startMs": 11810,
+  "endMs": 12350,
+  "words": [
+   {
+    "text": "最後まで",
+    "startMs": 11810,
+    "endMs": 12390
+   }
+  ]
+ },
+ {
+  "id": "19",
+  "text": "見てくれたら",
+  "startMs": 12390,
+  "endMs": 13220,
+  "words": [
+   {
+    "text": "見てくれたら",
+    "startMs": 12390,
+    "endMs": 13260
+   }
+  ]
+ },
+ {
+  "id": "20",
+  "text": "フォロー",
+  "startMs": 13260,
+  "endMs": 13760,
+  "words": [
+   {
+    "text": "フォロー",
+    "startMs": 13260,
+    "endMs": 13800
+   }
+  ]
+ },
+ {
+  "id": "21",
+  "text": "お願い",
+  "startMs": 13800,
+  "endMs": 14195,
+  "words": [
+   {
+    "text": "お願い",
+    "startMs": 13800,
+    "endMs": 14235
+   }
+  ]
+ },
+ {
+  "id": "22",
+  "text": "します",
+  "startMs": 14235,
+  "endMs": 15140,
+  "words": [
+   {
+    "text": "します",
+    "startMs": 14235,
+    "endMs": 15040
+   }
+  ]
+ }
+]

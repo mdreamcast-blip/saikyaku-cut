@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node_modules/ffmpeg-static/ffmpeg -y -loglevel error -stream_loop 39 -i samples/pause.aiff -c:a pcm_s16le samples/long10.wav)",
+      "Bash(node_modules/ffmpeg-static/ffmpeg -y -loglevel error -f lavfi -i testsrc2=size=1080x1920:rate=30 -i samples/long10.wav -shortest -c:v libx264 -pix_fmt yuv420p -preset veryfast -c:a aac samples/long10.mp4)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npm view *)",
+      "Bash(npm i *)",
+      "Bash(grep -vE \"^\\\\s*$\")"
+    ]
+  }
+}
