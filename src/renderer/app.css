@@ -57,16 +57,18 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .check { display: flex; align-items: center; gap: 6px; color: var(--text) !important; min-width: 0 !important; cursor: pointer; }
 
 .lines { flex: 1; overflow: auto; padding: 6px; }
-.lineItem { display: grid; grid-template-columns: 52px 18px 1fr; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 3px; border: 1px solid transparent; cursor: pointer; }
+.lineItem { display: grid; grid-template-columns: 52px auto 1fr; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 3px; border: 1px solid transparent; cursor: pointer; }
+.sfxCell { display: flex; align-items: center; gap: 4px; }
 .sfxChk { width: 15px; height: 15px; margin: 0; accent-color: var(--accent2); cursor: pointer; }
+.sfxSel { font-size: 11px; padding: 2px 4px; max-width: 110px; }
 .lineItem:hover { background: var(--panel2); }
 .lineItem.active { border-color: var(--accent); background: #2a1a24; }
 .lineItem .t { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11px; }
 .lineItem .lineText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; cursor: text; }
 .lineItem input.inlineEdit { width: 100%; font-size: 14px; }
 .lineItem .spk { font-size: 11px; padding: 3px 4px; font-weight: 700; }
-.lineItem:has(.spk) { grid-template-columns: 52px 18px 72px 1fr; }
-.lineItem.overlayItem { grid-template-columns: 52px 18px 1fr 40px; background: #221c22; }
+.lineItem:has(.spk) { grid-template-columns: 52px auto 72px 1fr; }
+.lineItem.overlayItem { grid-template-columns: 52px auto 1fr 40px; background: #221c22; }
 
 .themeGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .themeCard { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; text-align: left; }

@@ -1,0 +1,122 @@
+[
+ {
+  "name": "bishi",
+  "label": "ビシッ(軽いパンチ)",
+  "source": "Kenney kenney_impact-sounds / impactPunch_medium_000.ogg (CC0)"
+ },
+ {
+  "name": "dosu",
+  "label": "ドスッ(重いパンチ)",
+  "source": "Kenney kenney_impact-sounds / impactPunch_heavy_000.ogg (CC0)"
+ },
+ {
+  "name": "kon",
+  "label": "コン(木)",
+  "source": "Kenney kenney_impact-sounds / impactWood_medium_000.ogg (CC0)"
+ },
+ {
+  "name": "kan",
+  "label": "カン(金属)",
+  "source": "Kenney kenney_impact-sounds / impactMetal_medium_000.ogg (CC0)"
+ },
+ {
+  "name": "kacha",
+  "label": "カチャ(皿)",
+  "source": "Kenney kenney_impact-sounds / impactPlate_light_000.ogg (CC0)"
+ },
+ {
+  "name": "chin",
+  "label": "チン(ガラス)",
+  "source": "Kenney kenney_impact-sounds / impactGlass_light_000.ogg (CC0)"
+ },
+ {
+  "name": "gong",
+  "label": "ゴーン(鐘)",
+  "source": "Kenney kenney_impact-sounds / impactBell_heavy_000.ogg (CC0)"
+ },
+ {
+  "name": "bofu",
+  "label": "ボフッ(柔らかい)",
+  "source": "Kenney kenney_impact-sounds / impactSoft_heavy_000.ogg (CC0)"
+ },
+ {
+  "name": "kakon",
+  "label": "カコン(缶)",
+  "source": "Kenney kenney_impact-sounds / impactTin_medium_000.ogg (CC0)"
+ },
+ {
+  "name": "kachi",
+  "label": "カチ(クリック)",
+  "source": "Kenney kenney_interface-sounds / click_001.ogg (CC0)"
+ },
+ {
+  "name": "pon",
+  "label": "ポン",
+  "source": "Kenney kenney_interface-sounds / bong_001.ogg (CC0)"
+ },
+ {
+  "name": "pi",
+  "label": "ピッ(選択)",
+  "source": "Kenney kenney_interface-sounds / select_001.ogg (CC0)"
+ },
+ {
+  "name": "piron",
+  "label": "ピロン(決定)",
+  "source": "Kenney kenney_interface-sounds / confirmation_001.ogg (CC0)"
+ },
+ {
+  "name": "bubu",
+  "label": "ブブッ(エラー)",
+  "source": "Kenney kenney_interface-sounds / error_001.ogg (CC0)"
+ },
+ {
+  "name": "hate",
+  "label": "ピロ?(疑問)",
+  "source": "Kenney kenney_interface-sounds / question_001.ogg (CC0)"
+ },
+ {
+  "name": "shu_open",
+  "label": "シュッ(開く)",
+  "source": "Kenney kenney_interface-sounds / maximize_001.ogg (CC0)"
+ },
+ {
+  "name": "shu_close",
+  "label": "シュッ(閉じる)",
+  "source": "Kenney kenney_interface-sounds / minimize_001.ogg (CC0)"
+ },
+ {
+  "name": "glitch",
+  "label": "ザッ(グリッチ)",
+  "source": "Kenney kenney_interface-sounds / glitch_001.ogg (CC0)"
+ },
+ {
+  "name": "poto",
+  "label": "ポトッ(落下)",
+  "source": "Kenney kenney_interface-sounds / drop_001.ogg (CC0)"
+ },
+ {
+  "name": "gari",
+  "label": "ガリッ(スクラッチ)",
+  "source": "Kenney kenney_interface-sounds / scratch_001.ogg (CC0)"
+ },
+ {
+  "name": "switch",
+  "label": "カチッ(スイッチ)",
+  "source": "Kenney kenney_interface-sounds / switch_001.ogg (CC0)"
+ },
+ {
+  "name": "poron",
+  "label": "ポロン(弦)",
+  "source": "Kenney kenney_interface-sounds / pluck_001.ogg (CC0)"
+ },
+ {
+  "name": "ko",
+  "label": "コッ(トグル)",
+  "source": "Kenney kenney_interface-sounds / toggle_001.ogg (CC0)"
+ },
+ {
+  "name": "chi",
+  "label": "チッ(ティック)",
+  "source": "Kenney kenney_interface-sounds / tick_001.ogg (CC0)"
+ }
+]

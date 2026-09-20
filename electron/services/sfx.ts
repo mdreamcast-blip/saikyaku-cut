@@ -12,3 +12,14 @@ export function sfxDir(): string {
 }
 
 export const sfxPath = (name: string) => path.join(sfxDir(), `${name.replace(/[^a-z0-9_-]/gi, "")}.wav`);
+
+/** manifest.json に書かれた順で一覧を返す。無ければフォルダ内の wav を名前のまま返す */
+export function sfxList(): { name: string; label: string }[] {
+  const dir = sfxDir();
+  try {
+    const m = JSON.parse(fs.readFileSync(path.join(dir, "manifest.json"), "utf8")) as { name: string; label: string }[];
+    return m.filter((s) => fs.existsSync(path.join(dir, `${s.name}.wav`)));
+  } catch {
+    return fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".wav")).map((f) => ({ name: f.replace(/\.wav$/, ""), label: f.replace(/\.wav$/, "") })) : [];
+  }
+}

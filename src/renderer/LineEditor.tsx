@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { SFX_LIST, type CaptionStyle, type Line, type Project } from "../shared/types";
+import type { CaptionStyle, Line, Project, SfxItem } from "../shared/types";
 
 type Props = {
   project: Project;
   line: Line;
   index: number;
   palette: CaptionStyle[];
+  sfxList: SfxItem[];
   onChange: (patch: Partial<Line>) => void;
   onReplace: (lines: Line[]) => void; // 分割・結合・削除・追加など行の並びが変わる操作
   onSeek: (ms: number) => void;
@@ -15,7 +16,7 @@ const toSec = (ms: number) => (ms / 1000).toFixed(2);
 const fromSec = (s: string) => Math.max(0, Math.round(parseFloat(s || "0") * 1000));
 
 /** 選択中の 1 行を細かく直すパネル。 */
-export const LineEditor: React.FC<Props> = ({ project, line, index, palette, onChange, onReplace, onSeek }) => {
+export const LineEditor: React.FC<Props> = ({ project, line, index, palette, sfxList, onChange, onReplace, onSeek }) => {
   const [text, setText] = useState(line.text);
   const [start, setStart] = useState(toSec(line.startMs));
   const [end, setEnd] = useState(toSec(line.endMs));
@@ -140,7 +141,7 @@ export const LineEditor: React.FC<Props> = ({ project, line, index, palette, onC
 
       <div className="row">
         <label className="field inline">
-          <span>大きさ {Math.round((line.fontScale ?? 1) * 100)}%</span>
+          <span>この行の大きさ {Math.round((line.fontScale ?? 1) * 100)}%(全体 {Math.round(project.fontScale * 100)}% に対して)</span>
           <input type="range" min={0.5} max={1.8} step={0.05} value={line.fontScale ?? 1} onChange={(e) => onChange({ fontScale: Number(e.target.value) })} />
         </label>
         <label className="field inline">
@@ -152,13 +153,13 @@ export const LineEditor: React.FC<Props> = ({ project, line, index, palette, onC
 
       <div className="row">
         <label className="check">
-          <input type="checkbox" checked={!!line.sfx} onChange={(e) => onChange({ sfx: e.target.checked ? (project.sfxDefault || "bishi") : undefined })} />
+          <input type="checkbox" checked={!!line.sfx} onChange={(e) => onChange({ sfx: e.target.checked ? (project.sfxDefault || sfxList[0]?.name) : undefined })} />
           出るときに効果音
         </label>
         {line.sfx && (
           <>
             <select value={line.sfx} onChange={(e) => onChange({ sfx: e.target.value })}>
-              {SFX_LIST.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
+              {sfxList.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
             </select>
             <button className="mini" onClick={() => { const a = new Audio(window.api.sfxUrl(line.sfx!)); a.volume = project.sfxVolume; a.play().catch(() => {}); }}>🔊 試聴</button>
           </>

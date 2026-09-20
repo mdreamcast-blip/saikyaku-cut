@@ -8,18 +8,20 @@ type Props = {
   /** 話者ごとの色。指定があれば style.color を上書き */
   speakerColor?: string;
   align?: "center" | "left" | "right";
+  /** 全体の文字サイズ倍率(Project.fontScale) */
+  globalScale?: number;
 };
 
 /**
  * 1行分の字幕。行の開始フレームを 0 とした相対フレームで動かす。
  * 親の <Sequence> で行の区間に切り出されている前提。
  */
-export const CaptionLine: React.FC<Props> = ({ line, style: baseStyle, speakerColor, align = "center" }) => {
-  // 行ごとの上書き(話者色・サイズ倍率・位置)
+export const CaptionLine: React.FC<Props> = ({ line, style: baseStyle, speakerColor, align = "center", globalScale = 1 }) => {
+  // 行ごとの上書き(話者色・サイズ倍率・位置)。サイズは 全体倍率 × 行倍率
   const style: CaptionStyle = {
     ...baseStyle,
     color: speakerColor ?? baseStyle.color,
-    fontSize: Math.round(baseStyle.fontSize * (line.fontScale ?? 1)),
+    fontSize: Math.round(baseStyle.fontSize * globalScale * (line.fontScale ?? 1)),
     offsetY: baseStyle.offsetY + (line.offsetY ?? 0),
   };
   const frame = useCurrentFrame();

@@ -16,6 +16,7 @@ const api: Api = {
   },
   toFileUrl: (p) => `http://127.0.0.1:${mediaPort}/m?p=${encodeURIComponent(p)}`,
   sfxUrl: (name) => `http://127.0.0.1:${mediaPort}/m?p=${encodeURIComponent(`${sfxDir}/${name}.wav`)}`,
+  sfxList: () => ipcRenderer.invoke("sfxList"),
 };
 
 // main から additionalArguments で渡された配信ポートと効果音フォルダ

@@ -24,15 +24,8 @@ export type Line = {
   sfx?: string;
 };
 
-/** 同梱の効果音。assets/sfx/<name>.wav */
-export const SFX_LIST = [
-  { name: "bishi", label: "ビシ!" },
-  { name: "pon", label: "ポン" },
-  { name: "kachi", label: "カチ" },
-  { name: "shu", label: "シュッ" },
-  { name: "don", label: "ドン" },
-] as const;
-export type SfxName = (typeof SFX_LIST)[number]["name"];
+/** 同梱の効果音の 1 件。assets/sfx/<name>.wav。一覧は assets/sfx/manifest.json から読む */
+export type SfxItem = { name: string; label: string };
 
 export type AnimationKind =
   | "pop"
@@ -121,7 +114,7 @@ export type SilenceOptions = {
   paddingMs: number;
 };
 
-export const DEFAULT_SILENCE: SilenceOptions = { thresholdDb: -32, minSilenceMs: 600, paddingMs: 150 };
+export const DEFAULT_SILENCE: SilenceOptions = { thresholdDb: -32, minSilenceMs: 600, paddingMs: 350 };
 
 /** プロジェクト全体の設定。Remotion に inputProps として渡す。 */
 export type Project = {
@@ -157,6 +150,8 @@ export type Project = {
   speakerColors: string[];
   /** 追加テキスト */
   overlays: Overlay[];
+  /** 字幕全体の文字の大きさ倍率(1 = テーマ既定)。行ごとの fontScale はこれに掛かる */
+  fontScale: number;
   /** 効果音の音量(0〜1) */
   sfxVolume: number;
   /** 新しく作る字幕・テキストに最初から付ける効果音("" なら付けない) */
@@ -182,6 +177,7 @@ export const DEFAULT_PROJECT: Omit<Project, "sourcePath" | "mediaPath" | "mediaI
   numSpeakers: 2,
   speakerColors: DEFAULT_SPEAKER_COLORS,
   overlays: [],
+  fontScale: 1,
   sfxVolume: 0.6,
   sfxDefault: "",
 };
@@ -217,6 +213,8 @@ export type Api = {
   toFileUrl: (p: string) => string;
   /** 同梱効果音の再生 URL(Player 用) */
   sfxUrl: (name: string) => string;
+  /** 同梱効果音の一覧(manifest.json) */
+  sfxList: () => Promise<SfxItem[]>;
 };
 
 /** Remotion に渡す入力。Project に、再生環境ごとの URL を足したもの */

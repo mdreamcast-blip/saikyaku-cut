@@ -52,7 +52,7 @@ export const PreviewLayer: React.FC<Props> = ({ project: p, currentMs, selectedI
   const len = (s: string) => Array.from(s).length;
 
   const lineBox = (l: Line, style: CaptionStyle) => {
-    const fs = style.fontSize * (l.fontScale ?? 1) * scale;
+    const fs = style.fontSize * (p.fontScale ?? 1) * (l.fontScale ?? 1) * scale;
     const cy = size.h / 2 + (style.offsetY + (l.offsetY ?? 0)) * scale;
     const rows = Math.max(1, Math.ceil(len(l.text) / 14));
     const h = fs * 1.35 * rows + 16;

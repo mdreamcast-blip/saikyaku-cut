@@ -63,6 +63,7 @@ export const ReelComposition: React.FC<CompositionProps> = (p) => {
               line={line}
               style={palette[styleIdx[i]]}
               speakerColor={line.speaker ? p.speakerColors?.[line.speaker] || undefined : undefined}
+              globalScale={p.fontScale ?? 1}
               // 話者 1 は中央、2 人目以降は左右に振って会話らしく見せる
               align={line.speaker === undefined ? "center" : (["center", "right", "left", "center", "right", "left"] as const)[line.speaker % 6]}
             />

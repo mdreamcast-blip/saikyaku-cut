@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { OVERLAY_FONTS, SFX_LIST, type AnimationKind, type Overlay } from "../shared/types";
+import { OVERLAY_FONTS, type AnimationKind, type Overlay, type SfxItem } from "../shared/types";
 
 const ANIMS: { v: AnimationKind; label: string }[] = [
   { v: "pop", label: "ポップ" }, { v: "slideUp", label: "下から" }, { v: "bounce", label: "バウンド" }, { v: "shake", label: "揺れ" },
@@ -9,6 +9,7 @@ const ANIMS: { v: AnimationKind; label: string }[] = [
 
 type Props = {
   overlay: Overlay;
+  sfxList: SfxItem[];
   onChange: (patch: Partial<Overlay>) => void;
   onDelete: () => void;
   onDuplicate: () => void;
@@ -19,7 +20,7 @@ const toSec = (ms: number) => (ms / 1000).toFixed(2);
 const fromSec = (s: string) => Math.max(0, Math.round(parseFloat(s || "0") * 1000));
 
 /** 追加テキスト 1 つ分の編集パネル。 */
-export const OverlayEditor: React.FC<Props> = ({ overlay: o, onChange, onDelete, onDuplicate, onSeek }) => {
+export const OverlayEditor: React.FC<Props> = ({ overlay: o, sfxList, onChange, onDelete, onDuplicate, onSeek }) => {
   const [start, setStart] = useState(toSec(o.startMs));
   const [end, setEnd] = useState(toSec(o.endMs));
   useEffect(() => { setStart(toSec(o.startMs)); setEnd(toSec(o.endMs)); }, [o.id, o.startMs, o.endMs]);
@@ -72,13 +73,13 @@ export const OverlayEditor: React.FC<Props> = ({ overlay: o, onChange, onDelete,
 
       <div className="row">
         <label className="check">
-          <input type="checkbox" checked={!!o.sfx} onChange={(e) => onChange({ sfx: e.target.checked ? "bishi" : undefined })} />
+          <input type="checkbox" checked={!!o.sfx} onChange={(e) => onChange({ sfx: e.target.checked ? sfxList[0]?.name : undefined })} />
           出るときに効果音
         </label>
         {o.sfx && (
           <>
             <select value={o.sfx} onChange={(e) => onChange({ sfx: e.target.value })}>
-              {SFX_LIST.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
+              {sfxList.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
             </select>
             <button className="mini" onClick={() => { const a = new Audio(window.api.sfxUrl(o.sfx!)); a.play().catch(() => {}); }}>🔊 試聴</button>
           </>

@@ -3,8 +3,8 @@ import { Player, type PlayerRef } from "@remotion/player";
 import { ReelComposition } from "../remotion/ReelComposition";
 import { THEMES, THEME_LABELS } from "../remotion/styles";
 import {
-  DEFAULT_OVERLAY, DEFAULT_PROJECT, GRANULARITY_LABELS, SFX_LIST,
-  type Granularity, type Line, type Overlay, type Progress, type Project, type SilenceOptions, type ThemeName,
+  DEFAULT_OVERLAY, DEFAULT_PROJECT, GRANULARITY_LABELS,
+  type Granularity, type Line, type SfxItem, type Overlay, type Progress, type Project, type SilenceOptions, type ThemeName,
 } from "../shared/types";
 import { LineEditor } from "./LineEditor";
 import { OverlayEditor } from "./OverlayEditor";
@@ -23,8 +23,70 @@ type Tab = "captions" | "text" | "style" | "settings";
  * CapCut 風の 3 ペイン + タイムライン。
  * 左: タブ(字幕 / テキスト / 演出 / 設定)  中央: プレビュー(直接編集)  右: 選択中の属性  下: タイムライン
  */
+/** 元に戻す用の履歴。連続した変更(ドラッグ・スライダー)は 500ms 以内なら 1 回にまとめる */
+const HISTORY_LIMIT = 100;
+
 export const App: React.FC = () => {
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProjectRaw] = useState<Project | null>(null);
+  // 現在値の鏡。履歴の操作は React の更新関数の中ではなく、ここを基準に行う
+  // (開発モードでは更新関数が 2 回呼ばれるため、中で push/pop すると二重になる)
+  const projectRef = useRef<Project | null>(null);
+  const past = useRef<Project[]>([]);
+  const future = useRef<Project[]>([]);
+  const lastPush = useRef(0);
+  const [, bump] = useState(0); // 履歴ボタンの有効/無効を再描画するため
+
+  /** 変更を履歴に積みながら反映する */
+  const setProject = useCallback((next: Project | null | ((p: Project | null) => Project | null)) => {
+    const prev = projectRef.current;
+    const value = typeof next === "function" ? next(prev) : next;
+    if (prev && value && value !== prev) {
+      const now = Date.now();
+      if (now - lastPush.current > 500) {
+        past.current.push(prev);
+        if (past.current.length > HISTORY_LIMIT) past.current.shift();
+        future.current.length = 0;
+      }
+      lastPush.current = now;
+    }
+    projectRef.current = value;
+    setProjectRaw(value);
+    bump((n) => n + 1);
+  }, []);
+  const undo = useCallback(() => {
+    const prev = past.current.pop();
+    if (!prev) return;
+    if (projectRef.current) future.current.push(projectRef.current);
+    lastPush.current = 0;
+    projectRef.current = prev;
+    setProjectRaw(prev);
+    bump((n) => n + 1);
+  }, []);
+  const redo = useCallback(() => {
+    const next = future.current.pop();
+    if (!next) return;
+    if (projectRef.current) past.current.push(projectRef.current);
+    lastPush.current = 0;
+    projectRef.current = next;
+    setProjectRaw(next);
+    bump((n) => n + 1);
+  }, []);
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (["INPUT", "TEXTAREA"].includes(t.tagName)) return;
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [undo, redo]);
+
+  // 動作確認用(ブラウザのコンソールから履歴の長さを見る)
+  (window as any).__hist = { past: past.current, future: future.current };
+
+  const [sfxList, setSfxList] = useState<SfxItem[]>([]);
+  useEffect(() => { window.api.sfxList().then(setSfxList).catch(() => setSfxList([])); }, []);
+  const firstSfx = sfxList[0]?.name ?? "";
   const [progress, setProgress] = useState<Progress | null>(null);
   const [busy, setBusy] = useState(false);
   const [sel, setSel] = useState<Selection>(null);
@@ -139,7 +201,7 @@ export const App: React.FC = () => {
     seekMs(s + 150);
   };
 
-  const sfxUrls = useMemo(() => Object.fromEntries(SFX_LIST.map((s) => [s.name, window.api.sfxUrl(s.name)])), []);
+  const sfxUrls = useMemo(() => Object.fromEntries(sfxList.map((s) => [s.name, window.api.sfxUrl(s.name)])), [sfxList]);
   const inputProps = useMemo(
     () => (project ? { ...project, mediaSrc: project.mediaPath ? window.api.toFileUrl(project.mediaPath) : "", sfxUrls } : null),
     [project, sfxUrls],
@@ -192,6 +254,9 @@ export const App: React.FC = () => {
       <div className="toolbar">
         <button onClick={pick} disabled={busy}>📂 開く</button>
         <span className="sep" />
+        <button onClick={undo} disabled={!past.current.length} title="元に戻す (⌘Z)">↩ 戻る</button>
+        <button onClick={redo} disabled={!future.current.length} title="やり直す (⇧⌘Z)">↪ 進む</button>
+        <span className="sep" />
         <button onClick={cutSilence} disabled={!project || busy} title="無音を検出して詰めます(設定タブで調整)">✂ 無音カット</button>
         <button onClick={transcribe} disabled={!project || busy}>🎙 文字起こし</button>
         <button onClick={() => addOverlayAt(currentMs)} disabled={!project || busy} title="再生位置にテキストを追加">Ｔ テキスト追加</button>
@@ -217,9 +282,16 @@ export const App: React.FC = () => {
               {project?.lines.map((l) => (
                 <div key={l.id} className={`lineItem ${sel?.id === l.id ? "active" : ""}`} onClick={() => selectLine(l)}>
                   <span className="t">{fmt(l.startMs)}</span>
-                  <input type="checkbox" className="sfxChk" title={l.sfx ? `効果音: ${SFX_LIST.find((s) => s.name === l.sfx)?.label ?? l.sfx}` : "効果音を付ける"}
-                    checked={!!l.sfx} onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => { const name = e.target.checked ? (project.sfxDefault || "bishi") : undefined; updateLine(l.id, { sfx: name }); if (name) previewSfx(name); }} />
+                  <span className="sfxCell" onClick={(e) => e.stopPropagation()}>
+                    <input type="checkbox" className="sfxChk" title="効果音を付ける"
+                      checked={!!l.sfx}
+                      onChange={(e) => { const name = e.target.checked ? (project.sfxDefault || firstSfx) : undefined; updateLine(l.id, { sfx: name }); if (name) previewSfx(name); }} />
+                    {l.sfx && (
+                      <select className="sfxSel" value={l.sfx} title="この字幕の効果音" onChange={(e) => { updateLine(l.id, { sfx: e.target.value }); previewSfx(e.target.value); }}>
+                        {sfxList.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
+                      </select>
+                    )}
+                  </span>
                   {project.diarize && (
                     <select className="spk" value={l.speaker ?? 0} style={{ color: (l.speaker && project.speakerColors[l.speaker]) || undefined }}
                       onClick={(e) => e.stopPropagation()} onChange={(e) => updateLine(l.id, { speaker: Number(e.target.value) })}>
@@ -247,8 +319,15 @@ export const App: React.FC = () => {
               {project?.overlays.map((o) => (
                 <div key={o.id} className={`lineItem overlayItem ${sel?.id === o.id ? "active" : ""}`} onClick={() => { setSel({ kind: "overlay", id: o.id }); seekMs(Math.min(o.startMs + 150, o.endMs - 50)); }}>
                   <span className="t">{fmt(o.startMs)}</span>
-                  <input type="checkbox" className="sfxChk" title="効果音を付ける" checked={!!o.sfx} onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => { const name = e.target.checked ? (project.sfxDefault || "bishi") : undefined; updateOverlay(o.id, { sfx: name }); if (name) previewSfx(name); }} />
+                  <span className="sfxCell" onClick={(e) => e.stopPropagation()}>
+                    <input type="checkbox" className="sfxChk" title="効果音を付ける" checked={!!o.sfx}
+                      onChange={(e) => { const name = e.target.checked ? (project.sfxDefault || firstSfx) : undefined; updateOverlay(o.id, { sfx: name }); if (name) previewSfx(name); }} />
+                    {o.sfx && (
+                      <select className="sfxSel" value={o.sfx} onChange={(e) => { updateOverlay(o.id, { sfx: e.target.value }); previewSfx(e.target.value); }}>
+                        {sfxList.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
+                      </select>
+                    )}
+                  </span>
                   <span className="lineText">{o.text}</span>
                   <span className="hint">{((o.endMs - o.startMs) / 1000).toFixed(1)}s</span>
                 </div>
@@ -275,7 +354,7 @@ export const App: React.FC = () => {
                   <label>新しい字幕に</label>
                   <select value={project?.sfxDefault ?? ""} disabled={!project} onChange={(e) => update({ sfxDefault: e.target.value })}>
                     <option value="">付けない</option>
-                    {SFX_LIST.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
+                    {sfxList.map((s) => <option key={s.name} value={s.name}>{s.label}</option>)}
                   </select>
                   <button className="mini" disabled={!project?.sfxDefault} onClick={() => previewSfx(project!.sfxDefault)}>🔊 試聴</button>
                 </div>
@@ -284,10 +363,22 @@ export const App: React.FC = () => {
                   <input type="range" min={0} max={1} step={0.05} value={project?.sfxVolume ?? 0.6} disabled={!project} onChange={(e) => update({ sfxVolume: Number(e.target.value) })} />
                 </div>
                 <div className="row">
-                  <button className="mini" disabled={!project} onClick={() => setAllSfx(project!.sfxDefault || "bishi")}>全部に付ける</button>
+                  <button className="mini" disabled={!project} onClick={() => setAllSfx(project!.sfxDefault || firstSfx)}>全部に付ける</button>
                   <button className="mini" disabled={!project} onClick={() => setAllSfx(undefined)}>全部外す</button>
                 </div>
-                <div className="hint">字幕一覧のチェックで 1 つずつ付け外しできます。音の種類は右の属性パネルで行ごとに変えられます。</div>
+                <div className="hint">字幕一覧のチェックで 1 つずつ付け外しでき、その横のプルダウンで音を選べます。素材は Kenney(CC0)。</div>
+              </div>
+              <div className="section">
+                <h3>文字の大きさ(全体)</h3>
+                <div className="row">
+                  <label>{Math.round((project?.fontScale ?? 1) * 100)}%</label>
+                  <input type="range" min={0.5} max={1.8} step={0.05} value={project?.fontScale ?? 1} disabled={!project} onChange={(e) => update({ fontScale: Number(e.target.value) })} style={{ width: 160 }} />
+                  <button className="mini" disabled={!project} onClick={() => update({ fontScale: 1 })}>100%</button>
+                </div>
+                <div className="row">
+                  <button className="mini" disabled={!project || !project.lines.some((l) => l.fontScale || l.offsetY)} onClick={() => update({ lines: project!.lines.map((l) => ({ ...l, fontScale: undefined, offsetY: undefined })) })}>行ごとの個別調整をすべて解除</button>
+                </div>
+                <div className="hint">まず全体で決めて、そのあと字幕を選んで右のパネル(または右下ハンドル)で 1 つずつ微調整できます。</div>
               </div>
               <div className="section">
                 <h3>切り替え</h3>
@@ -408,6 +499,7 @@ export const App: React.FC = () => {
               line={activeLine}
               index={activeIndex}
               palette={palette}
+              sfxList={sfxList}
               onChange={(patch) => updateLine(activeLine.id, patch)}
               onReplace={(lines) => { update({ lines }); if (!lines.some((l) => l.id === activeLine.id)) { const nl = lines[Math.min(activeIndex, lines.length - 1)]; setSel(nl ? { kind: "line", id: nl.id } : null); } }}
               onSeek={seekMs}
@@ -416,6 +508,7 @@ export const App: React.FC = () => {
             <OverlayEditor
               key={activeOverlay.id}
               overlay={activeOverlay}
+              sfxList={sfxList}
               onChange={(patch) => updateOverlay(activeOverlay.id, patch)}
               onDelete={() => { update({ overlays: project.overlays.filter((o) => o.id !== activeOverlay.id) }); setSel(null); }}
               onDuplicate={() => { const c = { ...activeOverlay, id: `ov-${Date.now()}`, startMs: activeOverlay.endMs + 40, endMs: activeOverlay.endMs + 40 + (activeOverlay.endMs - activeOverlay.startMs) }; update({ overlays: [...project.overlays, c] }); setSel({ kind: "overlay", id: c.id }); }}

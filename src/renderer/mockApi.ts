@@ -31,4 +31,5 @@ export const mockApi: Api = {
   onProgress: () => () => {},
   toFileUrl: (p) => p,
   sfxUrl: (name) => `/sfx/${name}.wav`,
+  sfxList: async () => { try { return await (await fetch("/sfx/manifest.json")).json(); } catch { return []; } },
 };
