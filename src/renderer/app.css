@@ -30,13 +30,17 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 
 /* 全体: タイトルバー / 3ペイン / タイムライン / ステータス */
 /* 列を minmax(0, 1fr) にして、中身(長いタイムライン)の幅で画面全体が広がらないようにする */
-.app { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px auto minmax(0, 1fr) 190px 26px; height: 100%; width: 100vw; overflow: hidden; }
+.app { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px 46px minmax(0, 1fr) 190px 26px; height: 100%; width: 100vw; overflow: hidden; }
 .app > * { min-width: 0; }
 /* 幅が足りないときは折り返して、ボタンが見切れないようにする */
-.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--panel2); }
+.toolbar { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; height: 46px; padding: 0 12px; overflow-x: auto; overflow-y: hidden; border-bottom: 1px solid var(--line); background: var(--panel2); }
+.toolbar > * { flex: none; white-space: nowrap; }
+.toolbar > .spacer { flex: 1 1 0; min-width: 0; }
 .toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
 .titlebar { -webkit-app-region: drag; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 84px; background: var(--panel); }
-.titlebar .brand { font-weight: 800; letter-spacing: .5px; }
+.titlebar { overflow: hidden; white-space: nowrap; }
+.titlebar .brand { font-weight: 800; letter-spacing: .5px; flex: none; }
+.titlebar .file { flex: 0 1 auto; min-width: 0; }
 .titlebar .brand b { color: var(--accent); }
 .spacer { flex: 1; }
 .titlebar button { -webkit-app-region: no-drag; }
@@ -44,7 +48,7 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .main { display: grid; grid-template-columns: 340px minmax(0, 1fr) 320px; min-height: 0; min-width: 0; }
 
 /* 左パネル */
-.side { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
+.side { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; min-width: 0; width: 340px; overflow: hidden; background: var(--panel); }
 .tabs { display: flex; border-bottom: 1px solid var(--line); }
 .tab { flex: 1; border: 0; border-radius: 0; background: transparent; padding: 10px 0; color: var(--muted); border-bottom: 2px solid transparent; }
 .tab.on { color: var(--text); border-bottom-color: var(--accent); font-weight: 700; }
@@ -59,8 +63,8 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .tag.ok { color: var(--ok); }
 .check { display: flex; align-items: center; gap: 6px; color: var(--text) !important; min-width: 0 !important; cursor: pointer; }
 
-.lines { flex: 1; overflow: auto; padding: 6px; }
-.lineItem { display: grid; grid-template-columns: 52px auto 1fr; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 3px; border: 1px solid transparent; cursor: pointer; }
+.lines { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 6px; }
+.lineItem { display: grid; grid-template-columns: 52px auto minmax(0, 1fr); gap: 8px; min-width: 0; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 3px; border: 1px solid transparent; cursor: pointer; }
 .sfxCell { display: flex; align-items: center; gap: 4px; }
 .sfxChk { width: 15px; height: 15px; margin: 0; accent-color: var(--accent2); cursor: pointer; }
 .sfxSel { font-size: 11px; padding: 2px 4px; max-width: 110px; }
@@ -73,8 +77,8 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .lineItem input.inlineEdit { width: 100%; font-size: 14px; }
 select { color-scheme: dark; }
 .lineItem .spk { font-size: 11px; padding: 3px 4px; font-weight: 700; }
-.lineItem:has(.spk) { grid-template-columns: 52px auto 72px 1fr; }
-.lineItem.overlayItem { grid-template-columns: 52px auto 1fr 40px; background: #221c22; }
+.lineItem:has(.spk) { grid-template-columns: 52px auto 72px minmax(0, 1fr); }
+.lineItem.overlayItem { grid-template-columns: 52px auto minmax(0, 1fr) 40px; background: #221c22; }
 
 .themeGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .themeCard { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; text-align: left; }
@@ -82,7 +86,7 @@ select { color-scheme: dark; }
 .themeCard.on { border-color: var(--accent); background: #2a1a24; }
 
 /* 中央 */
-.stage { display: flex; flex-direction: column; min-height: 0; background: #0a0a10; }
+.stage { display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; background: #0a0a10; }
 .preview { flex: 1; display: flex; align-items: center; justify-content: center; padding: 14px; min-height: 0; }
 .playerWrap { position: relative; height: 100%; aspect-ratio: 9 / 16; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
 .empty { color: var(--muted); text-align: center; line-height: 1.8; }
@@ -100,7 +104,7 @@ select { color-scheme: dark; }
 .pvEdit { width: 100%; height: 100%; resize: none; background: #000000aa; border: 2px solid var(--accent); border-radius: 6px; outline: none; padding: 4px 8px; }
 
 /* 右: 属性 */
-.inspector { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; }
+.inspector { border-left: 1px solid var(--line); background: var(--panel); overflow-x: hidden; overflow-y: auto; min-width: 0; width: 320px; }
 .editor { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px; }
 .editorHead { display: flex; justify-content: space-between; align-items: center; }
 .field { display: flex; flex-direction: column; gap: 4px; }
@@ -110,6 +114,10 @@ select { color-scheme: dark; }
 .field input[type="number"] { width: 80px; }
 .field input[type="range"] { width: 130px; }
 .words { display: flex; flex-wrap: wrap; gap: 6px; }
+.word { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor { min-width: 0; }
+.editor textarea, .editor select, .editor input[type="number"] { max-width: 100%; min-width: 0; }
+.field textarea { width: 100%; box-sizing: border-box; height: 84px; resize: none; overflow-y: auto; }
 .word { padding: 4px 10px; border-radius: 999px; font-size: 13px; }
 .word.on { background: var(--accent2); color: #111; border-color: var(--accent2); font-weight: 700; }
 

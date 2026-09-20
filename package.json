@@ -1,7 +1,7 @@
 {
   "name": "reelcaption",
   "productName": "細客CUT",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "音声から自動で字幕を起こし、1行ごとに違う演出を付けた縦型リール動画を書き出すデスクトップアプリ",
   "main": "dist-electron/main.js",
