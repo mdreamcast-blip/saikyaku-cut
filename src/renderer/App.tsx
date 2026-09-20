@@ -253,6 +253,7 @@ export const App: React.FC = () => {
       {/* 常に表示する操作バー(タブや選択状態に関係なく固定) */}
       <div className="toolbar">
         <button onClick={pick} disabled={busy}>📂 開く</button>
+        <button className="primary" onClick={render} disabled={!project || busy || (!project.lines.length && !project.overlays.length)} title="字幕を焼き込んだ MP4 を保存します">💾 書き出し(保存)</button>
         <span className="sep" />
         <button onClick={undo} disabled={!past.current.length} title="元に戻す (⌘Z)">↩ 戻る</button>
         <button onClick={redo} disabled={!future.current.length} title="やり直す (⇧⌘Z)">↪ 進む</button>
@@ -260,7 +261,7 @@ export const App: React.FC = () => {
         <button onClick={cutSilence} disabled={!project || busy} title="無音を検出して詰めます(設定タブで調整)">✂ 無音カット</button>
         <button onClick={transcribe} disabled={!project || busy}>🎙 文字起こし</button>
         <button onClick={() => addOverlayAt(currentMs)} disabled={!project || busy} title="再生位置にテキストを追加">Ｔ テキスト追加</button>
-        <button className="primary" onClick={render} disabled={!project || busy || (!project.lines.length && !project.overlays.length)}>⬇ 書き出し</button>
+        <span className="spacer" />
         {project?.removedMs ? <span className="tag ok">無音 {(project.removedMs / 1000).toFixed(1)}s カット済み</span> : null}
         {project && <span className="tag">{fmt(project.durationMs)}</span>}
       </div>

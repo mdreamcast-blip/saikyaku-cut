@@ -29,10 +29,11 @@ input[type="color"] { width: 36px; height: 28px; padding: 0; border: 1px solid v
 textarea { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; line-height: 1.5; resize: vertical; }
 
 /* 全体: タイトルバー / 3ペイン / タイムライン / ステータス */
-.app { display: grid; grid-template-rows: 40px auto minmax(0, 1fr) 190px 26px; height: 100%; min-width: 900px; }
-/* 幅が足りないときは折り返して、書き出しボタンが見切れないようにする */
+/* 列を minmax(0, 1fr) にして、中身(長いタイムライン)の幅で画面全体が広がらないようにする */
+.app { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px auto minmax(0, 1fr) 190px 26px; height: 100%; width: 100vw; overflow: hidden; }
+.app > * { min-width: 0; }
+/* 幅が足りないときは折り返して、ボタンが見切れないようにする */
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--panel2); }
-.toolbar .primary { margin-left: auto; }
 .toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
 .titlebar { -webkit-app-region: drag; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 84px; background: var(--panel); }
 .titlebar .brand { font-weight: 800; letter-spacing: .5px; }
@@ -40,7 +41,7 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .spacer { flex: 1; }
 .titlebar button { -webkit-app-region: no-drag; }
 
-.main { display: grid; grid-template-columns: 340px 1fr 320px; min-height: 0; }
+.main { display: grid; grid-template-columns: 340px minmax(0, 1fr) 320px; min-height: 0; min-width: 0; }
 
 /* 左パネル */
 .side { border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
@@ -113,7 +114,7 @@ select { color-scheme: dark; }
 .word.on { background: var(--accent2); color: #111; border-color: var(--accent2); font-weight: 700; }
 
 /* タイムライン */
-.timeline { border-top: 1px solid var(--line); background: var(--panel); user-select: none; display: flex; flex-direction: column; min-height: 0; }
+.timeline { border-top: 1px solid var(--line); background: var(--panel); user-select: none; display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
 .transport { display: flex; align-items: center; gap: 10px; padding: 5px 12px; border-bottom: 1px solid var(--line); }
 .transport .play { width: 34px; height: 28px; padding: 0; font-size: 13px; }
 .transport .tcode { font-variant-numeric: tabular-nums; font-size: 13px; }
