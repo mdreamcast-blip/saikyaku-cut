@@ -29,8 +29,10 @@ input[type="color"] { width: 36px; height: 28px; padding: 0; border: 1px solid v
 textarea { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; line-height: 1.5; resize: vertical; }
 
 /* 全体: タイトルバー / 3ペイン / タイムライン / ステータス */
-.app { display: grid; grid-template-rows: 40px 46px minmax(0, 1fr) 190px 26px; height: 100%; min-width: 1100px; }
-.toolbar { display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line); background: var(--panel2); }
+.app { display: grid; grid-template-rows: 40px auto minmax(0, 1fr) 190px 26px; height: 100%; min-width: 900px; }
+/* 幅が足りないときは折り返して、書き出しボタンが見切れないようにする */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--panel2); }
+.toolbar .primary { margin-left: auto; }
 .toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
 .titlebar { -webkit-app-region: drag; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 84px; background: var(--panel); }
 .titlebar .brand { font-weight: 800; letter-spacing: .5px; }
@@ -65,7 +67,10 @@ textarea { background: var(--panel2); border: 1px solid var(--line); border-radi
 .lineItem.active { border-color: var(--accent); background: #2a1a24; }
 .lineItem .t { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11px; }
 .lineItem .lineText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; cursor: text; }
+/* 文言を直す欄は白地に黒文字で統一(読みやすさ優先) */
+.lineItem input.inlineEdit, .field textarea, .pvEdit { background: #fff !important; color: #111 !important; border: 2px solid var(--accent) !important; text-shadow: none !important; -webkit-text-stroke: 0 !important; }
 .lineItem input.inlineEdit { width: 100%; font-size: 14px; }
+select { color-scheme: dark; }
 .lineItem .spk { font-size: 11px; padding: 3px 4px; font-weight: 700; }
 .lineItem:has(.spk) { grid-template-columns: 52px auto 72px 1fr; }
 .lineItem.overlayItem { grid-template-columns: 52px auto 1fr 40px; background: #221c22; }

@@ -14,9 +14,10 @@ let cachedServeUrl: string | null = null;
 /** Remotion のエントリ。開発時はソース、パッケージ後は同梱した src を指す。 */
 function entryPoint() {
   const candidates = [
-    path.join(process.cwd(), "src/remotion/index.ts"),
+    path.join(process.env.RC_APP_ROOT ?? "", "src/remotion/index.ts"),
     path.join(__dirname, "../src/remotion/index.ts"),
     path.join(process.resourcesPath ?? "", "src/remotion/index.ts"),
+    path.join(process.cwd(), "src/remotion/index.ts"),
   ];
   const found = candidates.find((p) => fs.existsSync(p));
   if (!found) throw new Error("Remotion のエントリ(src/remotion/index.ts)が見つかりません");
@@ -30,6 +31,9 @@ async function getServeUrl(report: Report) {
   cachedServeUrl = await bundle({
     entryPoint: entryPoint(),
     outDir: bundleDir(),
+    // webpack のキャッシュはエントリ近くの node_modules/.cache(= .app の内部)に書かれ、署名を壊し、
+    // 読み取り専用の場所ではエラーにもなる。バンドルは 1 秒ほどなのでキャッシュは使わない。
+    enableCaching: false,
     onProgress: (p) => report({ stage: "render", ratio: p / 100 * 0.2, message: `バンドル中 ${p}%` }),
   });
   return cachedServeUrl;

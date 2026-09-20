@@ -4,9 +4,10 @@ import path from "node:path";
 /** 同梱効果音(assets/sfx)の場所。開発時はプロジェクト直下、パッケージ後は resources 内。 */
 export function sfxDir(): string {
   const candidates = [
-    path.join(process.cwd(), "assets/sfx"),
+    path.join(process.env.RC_APP_ROOT ?? "", "assets/sfx"),
     path.join(__dirname, "../assets/sfx"),
     path.join(process.resourcesPath ?? "", "sfx"),
+    path.join(process.cwd(), "assets/sfx"),
   ];
   return candidates.find((p) => fs.existsSync(p)) ?? candidates[0];
 }

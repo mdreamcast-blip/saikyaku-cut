@@ -11,3 +11,5 @@ samples/*.png
 samples/sfx
 scripts/.t.cjs
 scripts/.*.cjs
+dist-web
+public-web

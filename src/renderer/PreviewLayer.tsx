@@ -108,9 +108,10 @@ export const PreviewLayer: React.FC<Props> = ({ project: p, currentMs, selectedI
 
   const clamp = (v: number) => Math.min(1, Math.max(0, v));
 
-  const inputStyle = (fs: number, color: string, family: string): React.CSSProperties => ({
-    fontSize: Math.max(14, fs), fontFamily: `"${family}", "Noto Sans JP", sans-serif`, fontWeight: 900, color,
-    textAlign: "center", lineHeight: 1.3, textShadow: "0 2px 8px #000",
+  // 編集中は白地に黒文字(色付き文字を白地に出すと読めないため、文字色は使わない)
+  const inputStyle = (fs: number, _color: string, family: string): React.CSSProperties => ({
+    fontSize: Math.max(14, Math.min(fs, 40)), fontFamily: `"${family}", "Noto Sans JP", sans-serif`, fontWeight: 700, color: "#111",
+    textAlign: "center", lineHeight: 1.3,
   });
 
   const renderBox = (kind: "line" | "overlay", id: string, box: { top: number; left: number; width: number; height: number; fontSize: number }, text: string, color: string, family: string, rotate = 0) => {

@@ -15,6 +15,24 @@ let mediaPort = 0;
 // アプリ名を変えても、ダウンロード済みのモデル類(数 GB)を置いたフォルダはそのまま使う
 app.setPath("userData", path.join(app.getPath("appData"), "ReelCaption"));
 
+// アプリ本体のあるフォルダ(開発時はプロジェクト直下、配布版は .app 内の app)。cwd に頼らず同梱物を探すため。
+process.env.RC_APP_ROOT = app.getAppPath();
+
+// Remotion は描画用ブラウザ(約 200MB)と作業キャッシュを「カレントフォルダに近い node_modules/.remotion」へ
+// 保存する。Dock やダブルクリックで起動すると cwd は "/"(読み取り専用)になり、書き出しが失敗するうえ、
+// アプリ内部に書き込むと署名も壊れる。そこで cwd を書き込める作業フォルダ(package.json 付き)に固定する。
+{
+  const work = path.join(app.getPath("userData"), "work");
+  try {
+    fs.mkdirSync(work, { recursive: true });
+    const pkg = path.join(work, "package.json");
+    if (!fs.existsSync(pkg)) fs.writeFileSync(pkg, JSON.stringify({ name: "saikyaku-cut-work", private: true }));
+    process.chdir(work);
+  } catch (e) {
+    console.error("作業フォルダを作れませんでした", e);
+  }
+}
+
 // エラーはファイルにも残す(配布版は画面のログが見えないため)
 const logFile = path.join(app.getPath("userData"), "logs", "app.log");
 function logLine(...args: unknown[]) {

@@ -35,6 +35,7 @@ function installPrebuiltWhisper() {
   if (fs.existsSync(exe)) return;
   const candidates = [
     path.join(process.resourcesPath ?? "", "whisper"),
+    path.join(process.env.RC_APP_ROOT ?? "", "resources/whisper"),
     path.join(process.cwd(), "resources/whisper"),
   ];
   const src = candidates.find((d) => fs.existsSync(path.join(d, "main")));

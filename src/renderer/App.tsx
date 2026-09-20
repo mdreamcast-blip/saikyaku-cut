@@ -260,10 +260,9 @@ export const App: React.FC = () => {
         <button onClick={cutSilence} disabled={!project || busy} title="無音を検出して詰めます(設定タブで調整)">✂ 無音カット</button>
         <button onClick={transcribe} disabled={!project || busy}>🎙 文字起こし</button>
         <button onClick={() => addOverlayAt(currentMs)} disabled={!project || busy} title="再生位置にテキストを追加">Ｔ テキスト追加</button>
-        <span className="spacer" />
+        <button className="primary" onClick={render} disabled={!project || busy || (!project.lines.length && !project.overlays.length)}>⬇ 書き出し</button>
         {project?.removedMs ? <span className="tag ok">無音 {(project.removedMs / 1000).toFixed(1)}s カット済み</span> : null}
         {project && <span className="tag">{fmt(project.durationMs)}</span>}
-        <button className="primary" onClick={render} disabled={!project || busy || (!project.lines.length && !project.overlays.length)}>⬇ 書き出し</button>
       </div>
 
       <div className="main">
