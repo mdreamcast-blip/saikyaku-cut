@@ -1,7 +1,10 @@
 # 細客CUT
 
 音声から自動で字幕を起こし、1 行ごとに違う演出を付けた縦型リール動画(1080×1920)を書き出す macOS アプリ。
-Electron + Remotion + whisper.cpp(ローカル・API 不要)。
+Electron + Remotion + whisper.cpp(ローカル・API 不要)。Android など他の端末向けに、ブラウザだけで動く版もあります。
+
+- **ブラウザ版(Android の Chrome など)**: https://mdreamcast-blip.github.io/saikyaku-cut/
+- 第三者のライブラリ・素材のライセンスは [NOTICE.md](NOTICE.md) を参照。
 
 ## 使う(配布版)
 

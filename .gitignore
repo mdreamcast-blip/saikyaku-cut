@@ -13,3 +13,4 @@ scripts/.t.cjs
 scripts/.*.cjs
 dist-web
 public-web
+sfx-src/
